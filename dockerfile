@@ -1,6 +1,6 @@
 # Stage 1 - Builder Stage
 # Use Node.js 20 Alpine as builder image
-FROM node:20-alpine As builder
+FROM node:20-alpine AS builder
 
 # Set working directory
 WORKDIR /app
@@ -18,7 +18,7 @@ COPY . .
 RUN npm run build 
 
 # Stage 2 - Builder Stage
-FROM nginx:stable-alpine As Production
+FROM nginx:stable-alpine AS production
 
 #Copy necessary nginx file
 COPY nginx.conf /etc/nginx/conf.d/default.conf
