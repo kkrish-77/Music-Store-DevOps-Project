@@ -1,68 +1,98 @@
-🎼 Music Store Microservice on AWS EKS
-This project showcases a production-ready Kubernetes deployment of a sample music store web application on AWS EKS. It leverages cloud-native best practices, ensuring secure, automated HTTPS access using NGINX Ingress Controller and cert-manager for streamlined TLS certificate management (Let’s Encrypt).
+***
 
-🌐 Live Demo
-Domain: https://musicstore.duckdns.org
-(Swap for your actual live URL)
+# 🎼 Music Store Microservice on AWS EKS
 
-AWS Region: us-east-1
-(Replace with your deployment region)
+A cloud-native, production-ready web app deployed on Amazon EKS.  
+This project demonstrates Kubernetes orchestration, automated HTTPS, CI/CD, dynamic DNS, and scalable infrastructure using modern DevOps practices.
 
-🛠️ Tech Stack & Architecture
-Component	Purpose	Location/Notes
-AWS EKS (Kubernetes)	Cluster orchestration	Cloud
-Docker/ECR	Container image registry	Provide your image reference
-NGINX Ingress	Ingress controller, traffic routing	Helm
-AWS NLB	Network Load Balancer for ingress	AWS
-cert-manager	TLS/SSL automation via ClusterIssuer	Helm
-Let’s Encrypt	Certificate Authority	ClusterIssuer
-DuckDNS + ExternalDNS	Dynamic DNS and DNS automation	DuckDNS (A record for NLB endpoint)
-🏗️ Architecture Overview
-Kubernetes Deployment: Manages replicated application Pods.
+***
 
-ClusterIP Service: Exposes Pods internally on port 80.
+## 🚀 Live Demo
 
-NGINX Ingress Controller: Provides external HTTPS access via AWS NLB.
+- **Application:** https://github.com/user-attachments/assets/c192fb3c-0ae4-4c32-9a5d-4390197a09e7
+- **Domain:** [https://musicstore.duckdns.org](https://musicstore.duckdns.org) (*currently offline / demo*)
+- **AWS Region:** `us-east-1`
+- **Container Registry:** Amazon ECR
 
-cert-manager: Automatically provisions and renews certificates from Let’s Encrypt.
+***
 
-DNS Management: DuckDNS domain points to NLB’s public entry point.
+## 🧰 Tech Stack Overview
 
-⚙️ Prerequisites
-Make sure these are installed and configured:
+| Component       | Purpose                              | Notes                      |
+|-----------------|--------------------------------------|----------------------------|
+| AWS EKS         | Managed Kubernetes cluster           | Cloud orchestration        |
+| Docker & ECR    | App containerization and registry    | Private image hosting      |
+| NGINX Ingress   | HTTPS routing, load balancing        | Helm install               |
+| AWS NLB         | Network Load Balancer (external)     | Managed by EKS             |
+| cert-manager    | TLS certificate automation           | Let’s Encrypt integration  |
+| DuckDNS         | Dynamic DNS routing                  | Maps domain → NLB IP       |
+| Helm            | Kubernetes package management        | Chart installs             |
+| GitHub Actions  | CI/CD pipeline                      | Build > ECR > Deploy       |
 
-kubectl
+***
 
-AWS CLI
+## 🏗️ Architecture
 
-eksctl
+### Flow Overview
 
-Helm
+[User] ⇄ [musicstore.duckdns.org] ⇄ [AWS NLB] ⇄ [NGINX Ingress] ⇄ [K8s Service] ⇄ [Pods]
 
-DuckDNS domain (points to your load balancer’s public IP)
+- cert-manager provisions TLS via Let’s Encrypt for HTTPS on Ingress
+- DuckDNS keeps domain records current with NLB’s external IP
+- GitHub Actions builds & pushes images, deploys to cluster
 
-🚀 Get Started: Deployment Steps
-Deploy Application and Service
+***
 
-bash
-kubectl apply -f k8s/deployment.yaml -n music-store
-kubectl apply -f k8s/service.yaml -n music-store
-kubectl get pods -n music-store
-Configure TLS Certificate Issuer
+## ⚙️ Prerequisites
 
-bash
-kubectl apply -f k8s/cluster-issuer.yaml
-Deploy Ingress Resource (with HTTPS)
+- `kubectl`, `awscli`, `eksctl`, `helm` (latest versions)
+- DuckDNS domain mapped to NLB
 
-bash
-kubectl apply -f k8s/ingress.yaml -n music-store
-Monitor & Verify Success
-Check external entrypoint (NLB):
+***
 
-bash
-kubectl get svc ingress-nginx-controller -n ingress-nginx
-Monitor certificate status:
+## 🚀 Deployment Steps
 
-bash
-kubectl get certificate -n music-store
-# Wait for: READY: True
+1. **Create EKS Cluster**
+   ```bash
+   eksctl create cluster --name music-store --region us-east-1 --nodes 2
+   aws eks update-kubeconfig --region us-east-1 --name music-store
+   kubectl get nodes
+   ```
+2. **Deploy Application**
+   ```bash
+   kubectl apply -f k8s/deployment.yaml -n music-store
+   kubectl apply -f k8s/service.yaml -n music-store
+   ```
+3. **Configure HTTPS & Ingress**
+   ```bash
+   kubectl apply -f k8s/cluster-issuer.yaml
+   kubectl apply -f k8s/ingress.yaml -n music-store
+   kubectl get certificate -n music-store # READY: True
+   ```
+4. **Validate DNS & HTTPS**
+   - Check NLB entry with DuckDNS
+   - Access via browser at https://musicstore.duckdns.org
+
+***
+
+## 🧩 CI/CD Automation
+
+- **Build:** Docker images for the app
+- **Publish:** Push images to ECR
+- **Deploy:** Kubectl applies to EKS cluster
+- *GitHub Actions handles all CI/CD workflow, including AWS credentials and Kubernetes manifests*
+
+***
+
+## 🛡️ Security & Scalability
+
+- Automated HTTPS certificates (cert-manager + Let’s Encrypt)
+- RBAC & IAM for cluster access
+- Images in private ECR registry
+- Pod autoscaling & update strategies supported (HPA; ready for rolling/blue-green)
+
+***
+
+## 👨‍💻 Author & Contributers: Kkrish Singh, Kaustubh Chavan, Utkarsh Vanjari
+  
+**MIT License** – Free to use and modify
