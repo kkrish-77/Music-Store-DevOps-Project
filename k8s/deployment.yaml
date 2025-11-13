@@ -20,4 +20,4 @@ spec:
           image: 788962775259.dkr.ecr.us-east-1.amazonaws.com/music-store-ecr
           imagePullPolicy: Always
           ports:
-            - containerPort: 8080
+            - containerPort: 80
