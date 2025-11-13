@@ -12,16 +12,16 @@ spec:
   ingressClassName: nginx   # 👈 add this for NGINX >= v1.0
   tls:
     - hosts:
-        - a93abb5d95df24e7aad53b0d059fe4ba-494d9850f21e6fc3.elb.ap-south-1.amazonaws.com
+        - musicstore.duckdns.org
       secretName: musicstore-tls
   rules:
-    - host: a93abb5d95df24e7aad53b0d059fe4ba-494d9850f21e6fc3.elb.ap-south-1.amazonaws.com
+    - host: musicstore.duckdns.org
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: music-store   # 👈 ensure this matches your Service name exactly
+                name: music-store-service   # 👈 ensure this matches your Service name exactly
                 port:
                   number: 80
