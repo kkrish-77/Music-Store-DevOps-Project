@@ -26,3 +26,7 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 # Copy the built files from the 'builder' stage into the NGINX web root
 # Vite's default output directory is 'dist'
 COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Expose port 80. NGINX listens on this port by default.
+EXPOSE 80
+
