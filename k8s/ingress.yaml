@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: music-store-ingress
+  namespace: music-store
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+spec:
+  ingressClassName: nginx   # 👈 add this for NGINX >= v1.0
+  tls:
+    - hosts:
+        - a93abb5d95df24e7aad53b0d059fe4ba-494d9850f21e6fc3.elb.ap-south-1.amazonaws.com
+      secretName: musicstore-tls
+  rules:
+    - host: a93abb5d95df24e7aad53b0d059fe4ba-494d9850f21e6fc3.elb.ap-south-1.amazonaws.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: music-store   # 👈 ensure this matches your Service name exactly
+                port:
+                  number: 80
