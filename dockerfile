@@ -1,4 +1,5 @@
-# Use Node.js 20 Alpine as base image
+# Stage 1 - Builder Stage
+# Use Node.js 20 Alpine as builder image
 FROM node:20-alpine As builder
 
 # Set working directory
@@ -15,3 +16,5 @@ COPY . .
 
 #Run the build command
 RUN npm run build 
+
+#
