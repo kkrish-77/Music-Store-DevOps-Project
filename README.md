@@ -95,4 +95,4 @@ https://github.com/user-attachments/assets/ab77727b-4b76-4660-a450-4a7963334677
 
 ## 👨‍💻 Author & Contributers: Kkrish Singh, Kaustubh Chavan, Utkarsh Vanjari
   
-**MIT License** – Free to use and modify
+**MIT License** – Free to use and modify.
